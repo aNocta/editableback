@@ -24,26 +24,13 @@ app.get("/cells", async (req, res) => {
     res.send(rows);
 })
 
-app.post("/set_cell", urlencodedParser, (req, res) => {
-    const db = JSON.parse(fs.readFileSync(dbFile, "utf-8"));
+app.post("/set_cell", urlencodedParser, async (req, res) => {
     const tableId = req.body.tableId;
     const row = req.body.row;
     const col = req.body.col;
     const value = req.body.value;
- 
-    const newBd = db.cells.map(cell => {
 
-        console.log(cell);
-        if(cell.table_id == tableId && cell.row == row && cell.col == col)
-            return {
-                table_id: tableId,
-                row,
-                col,
-                value
-            }
-        return cell;
-    });
-    fs.writeFileSync(dbFile, JSON.stringify({cells: newBd}));
+    await sql`UPDATE main SET value=${value} WHERE row=${row} AND col=${col} AND table_id=${tableId}`;
     res.send(200);
 });
 
