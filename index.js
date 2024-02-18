@@ -36,7 +36,7 @@ app.post("/set_cell", urlencodedParser, async (req, res) => {
 
 app.post("/mass_set_cell", urlencodedParser, async (req, res) => {
     const massEdit = req.body.mass;
-     massEdit.forEach(m => {
+     massEdit.forEach(async (m) => {
          await sql`UPDATE main SET value=${m.value} WHERE row=${m.row} AND col=${m.col} AND table_id=${m.table_id}`;
         });
     res.send(200);
