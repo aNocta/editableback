@@ -34,28 +34,11 @@ app.post("/set_cell", urlencodedParser, async (req, res) => {
     res.send(200);
 });
 
-app.post("/mass_set_cell", urlencodedParser, (req, res) => {
-    const db = JSON.parse(fs.readFileSync(dbFile, "utf-8"));
+app.post("/mass_set_cell", urlencodedParser, async (req, res) => {
     const massEdit = req.body.mass;
-    console.log([req.body]);
-
-    const newBd = db.cells.map(cell => {
-        let res;
-        
-        massEdit.forEach(m => {
-            if(cell.table_id == m.table_id && cell.row == m.row && cell.col == m.col){
-                res = {
-                    table_id: m.table_id,
-                    row: m.row,
-                    col: m.col,
-                    value: m.value
-                }
-            }
+     massEdit.forEach(m => {
+         await sql`UPDATE main SET value=${m.value} WHERE row=${m.row} AND col=${m.col} AND table_id=${m.table_id}`;
         });
-        if(res) return res;
-        return cell;
-    });
-    fs.writeFileSync(dbFile, JSON.stringify({cells: newBd}));
     res.send(200);
 });
 app.listen(3000);
