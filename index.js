@@ -2,6 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const path = require("path");
+const {sql} = require("@vercel/postgres")
 
 const app = express();
 
@@ -17,9 +18,12 @@ app.use(function (req, res, next) {
 });
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/cells", (req, res) => {
-    const db = JSON.parse(fs.readFileSync(dbFile, "utf-8"));
+app.get("/cells", async (req, res) => {
     const tableId = req.query.table_id;
+    const client = await sql.connect();
+    const {rows} = await client.sql(`SELECT * FROM main WHERE table_id=${table_id}`);
+    console.log(rows);
+    const db = JSON.parse(fs.readFileSync(dbFile, "utf-8"));
     const dbResponse = db.cells.filter(cell => cell.table_id == tableId);
     res.send(dbResponse);
 })
