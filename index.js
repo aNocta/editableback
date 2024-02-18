@@ -18,7 +18,7 @@ app.use(function (req, res, next) {
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/cells", (req, res) => {
-    const db = JSON.parse(fs.readFileSync("/tmp/db.json", "utf-8"));
+    const db = JSON.parse(fs.readFileSync(dbFile, "utf-8"));
     const tableId = req.query.table_id;
     const dbResponse = db.cells.filter(cell => cell.table_id == tableId);
     res.send(dbResponse);
