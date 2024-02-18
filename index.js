@@ -15,14 +15,14 @@ app.use(function (req, res, next) {
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/cells", (req, res) => {
-    const db = JSON.parse(fs.readFileSync("./db.json", "utf-8"));
+    const db = JSON.parse(fs.readFileSync("db.json", "utf-8"));
     const tableId = req.query.table_id;
     const dbResponse = db.cells.filter(cell => cell.table_id == tableId);
     res.send(dbResponse);
 })
 
 app.post("/set_cell", urlencodedParser, (req, res) => {
-    const db = JSON.parse(fs.readFileSync("./db.json", "utf-8"));
+    const db = JSON.parse(fs.readFileSync("db.json", "utf-8"));
     const tableId = req.body.tableId;
     const row = req.body.row;
     const col = req.body.col;
@@ -40,12 +40,12 @@ app.post("/set_cell", urlencodedParser, (req, res) => {
             }
         return cell;
     });
-    fs.writeFileSync("./db.json", JSON.stringify({cells: newBd}));
+    fs.writeFileSync("db.json", JSON.stringify({cells: newBd}));
     res.send(200);
 });
 
 app.post("/mass_set_cell", urlencodedParser, (req, res) => {
-    const db = JSON.parse(fs.readFileSync("./db.json", "utf-8"));
+    const db = JSON.parse(fs.readFileSync("db.json", "utf-8"));
     const massEdit = req.body.mass;
     console.log([req.body]);
 
@@ -65,7 +65,7 @@ app.post("/mass_set_cell", urlencodedParser, (req, res) => {
         if(res) return res;
         return cell;
     });
-    fs.writeFileSync("./db.json", JSON.stringify({cells: newBd}));
+    fs.writeFileSync("db.json", JSON.stringify({cells: newBd}));
     res.send(200);
 });
 app.listen(3000);
