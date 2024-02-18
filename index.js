@@ -6,7 +6,7 @@ const path = require("path");
 const app = express();
 
 const urlencodedParser = bodyParser.urlencoded({extended: false});
-const dbFile = path.join(process.cwd(), "db.json");
+const dbFile = path.join(process.cwd(), "tmp", "db.json");
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', "*");
