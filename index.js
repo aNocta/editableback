@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/cells", async (req, res) => {
     const tableId = req.query.table_id;
-    const {rows} = await sql(`SELECT * FROM main WHERE table_id=${tableId}`);
+    const {rows} = await sql`SELECT * FROM main WHERE table_id=${tableId}`;
     console.log(rows);
     const db = JSON.parse(fs.readFileSync(dbFile, "utf-8"));
     const dbResponse = db.cells.filter(cell => cell.table_id == tableId);
